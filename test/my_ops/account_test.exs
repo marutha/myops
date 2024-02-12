@@ -8,7 +8,18 @@ defmodule MyOps.AccountTest do
 
     import MyOps.AccountFixtures
 
-    @invalid_attrs %{affiliate_id: nil, balance: nil, birth_date: nil, country: nil, currency: nil, jurisdiction: nil, name: nil, registration_date: nil, sex: nil, sub_partner_id: nil}
+    @invalid_attrs %{
+      affiliate_id: nil,
+      balance: nil,
+      birth_date: nil,
+      country: nil,
+      currency: nil,
+      jurisdiction: nil,
+      name: nil,
+      registration_date: nil,
+      sex: nil,
+      sub_partner_id: nil
+    }
 
     test "list_users/0 returns all users" do
       user = user_fixture()
@@ -21,7 +32,18 @@ defmodule MyOps.AccountTest do
     end
 
     test "create_user/1 with valid data creates a user" do
-      valid_attrs = %{affiliate_id: "some affiliate_id", balance: 120.5, birth_date: ~D[2024-02-10], country: "some country", currency: "some currency", jurisdiction: "some jurisdiction", name: "some name", registration_date: ~D[2024-02-10], sex: "some sex", sub_partner_id: "some sub_partner_id"}
+      valid_attrs = %{
+        affiliate_id: "some affiliate_id",
+        balance: 120.5,
+        birth_date: ~D[2024-02-10],
+        country: "some country",
+        currency: "some currency",
+        jurisdiction: "some jurisdiction",
+        name: "some name",
+        registration_date: ~D[2024-02-10],
+        sex: "some sex",
+        sub_partner_id: "some sub_partner_id"
+      }
 
       assert {:ok, %User{} = user} = Account.create_user(valid_attrs)
       assert user.affiliate_id == "some affiliate_id"
@@ -42,7 +64,19 @@ defmodule MyOps.AccountTest do
 
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
-      update_attrs = %{affiliate_id: "some updated affiliate_id", balance: 456.7, birth_date: ~D[2024-02-11], country: "some updated country", currency: "some updated currency", jurisdiction: "some updated jurisdiction", name: "some updated name", registration_date: ~D[2024-02-11], sex: "some updated sex", sub_partner_id: "some updated sub_partner_id"}
+
+      update_attrs = %{
+        affiliate_id: "some updated affiliate_id",
+        balance: 456.7,
+        birth_date: ~D[2024-02-11],
+        country: "some updated country",
+        currency: "some updated currency",
+        jurisdiction: "some updated jurisdiction",
+        name: "some updated name",
+        registration_date: ~D[2024-02-11],
+        sex: "some updated sex",
+        sub_partner_id: "some updated sub_partner_id"
+      }
 
       assert {:ok, %User{} = user} = Account.update_user(user, update_attrs)
       assert user.affiliate_id == "some updated affiliate_id"
@@ -93,7 +127,11 @@ defmodule MyOps.AccountTest do
     end
 
     test "create_user_token/1 with valid data creates a user_token" do
-      valid_attrs = %{game_code: "some game_code", token: "7488a646-e31f-11e4-aace-600308960662", ttl: 42}
+      valid_attrs = %{
+        game_code: "some game_code",
+        token: "7488a646-e31f-11e4-aace-600308960662",
+        ttl: 42
+      }
 
       assert {:ok, %UserToken{} = user_token} = Account.create_user_token(valid_attrs)
       assert user_token.game_code == "some game_code"
@@ -107,9 +145,16 @@ defmodule MyOps.AccountTest do
 
     test "update_user_token/2 with valid data updates the user_token" do
       user_token = user_token_fixture()
-      update_attrs = %{game_code: "some updated game_code", token: "7488a646-e31f-11e4-aace-600308960668", ttl: 43}
 
-      assert {:ok, %UserToken{} = user_token} = Account.update_user_token(user_token, update_attrs)
+      update_attrs = %{
+        game_code: "some updated game_code",
+        token: "7488a646-e31f-11e4-aace-600308960668",
+        ttl: 43
+      }
+
+      assert {:ok, %UserToken{} = user_token} =
+               Account.update_user_token(user_token, update_attrs)
+
       assert user_token.game_code == "some updated game_code"
       assert user_token.token == "7488a646-e31f-11e4-aace-600308960668"
       assert user_token.ttl == 43

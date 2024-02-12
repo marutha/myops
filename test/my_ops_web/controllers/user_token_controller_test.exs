@@ -52,7 +52,10 @@ defmodule MyOpsWeb.UserTokenControllerTest do
   describe "update user_token" do
     setup [:create_user_token]
 
-    test "renders user_token when data is valid", %{conn: conn, user_token: %UserToken{id: id} = user_token} do
+    test "renders user_token when data is valid", %{
+      conn: conn,
+      user_token: %UserToken{id: id} = user_token
+    } do
       conn = put(conn, ~p"/api/user_tokens/#{user_token}", user_token: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 

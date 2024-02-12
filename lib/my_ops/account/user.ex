@@ -20,7 +20,29 @@ defmodule MyOps.Account.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :country, :jurisdiction, :sub_partner_id, :birth_date, :registration_date, :sex, :affiliate_id, :currency, :balance])
-    |> validate_required([:name, :country, :jurisdiction, :sub_partner_id, :birth_date, :registration_date, :sex, :affiliate_id, :currency, :balance])
+    |> cast(attrs, [
+      :name,
+      :country,
+      :jurisdiction,
+      :sub_partner_id,
+      :birth_date,
+      :registration_date,
+      :sex,
+      :affiliate_id,
+      :currency,
+      :balance
+    ])
+    |> validate_required([
+      :name,
+      :country,
+      :jurisdiction,
+      :sub_partner_id,
+      :birth_date,
+      :registration_date,
+      :sex,
+      :affiliate_id,
+      :currency,
+      :balance
+    ])
   end
 end

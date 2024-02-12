@@ -13,6 +13,7 @@ defmodule MyOps.Account.UserToken do
   @doc false
   def changeset(user_token, attrs) do
     attrs = Map.put(attrs, "ttl", 86400)
+
     user_token
     |> cast(attrs, [:token, :ttl, :game_code])
     |> validate_required([:token, :ttl, :game_code])

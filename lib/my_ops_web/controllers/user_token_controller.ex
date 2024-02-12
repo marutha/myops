@@ -28,7 +28,8 @@ defmodule MyOpsWeb.UserTokenController do
   def update(conn, %{"id" => id, "user_token" => user_token_params}) do
     user_token = Account.get_user_token!(id)
 
-    with {:ok, %UserToken{} = user_token} <- Account.update_user_token(user_token, user_token_params) do
+    with {:ok, %UserToken{} = user_token} <-
+           Account.update_user_token(user_token, user_token_params) do
       render(conn, :show, user_token: user_token)
     end
   end

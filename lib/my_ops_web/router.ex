@@ -1,8 +1,6 @@
 defmodule MyOpsWeb.Router do
   use MyOpsWeb, :router
 
-
-
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -15,7 +13,6 @@ defmodule MyOpsWeb.Router do
   pipeline :api do
     plug :accepts, ["json"]
     plug MyOps.Plugs.RequestId, "en"
-
   end
 
   # scope "/", MyOpsWeb do

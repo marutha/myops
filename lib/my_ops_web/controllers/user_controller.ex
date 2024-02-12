@@ -37,10 +37,12 @@ defmodule MyOpsWeb.UserController do
 
   def show(conn, %{"id" => id}) do
     user_id = get_user(conn)
+
     case Hammer.check_rate("show:#{user_id}", 60_000, 5) do
       {:allow, _count} ->
         user = Account.get_user!(user_id)
         render(conn, :show, user: user)
+
       {:deny, _limit} ->
         render(conn, :error, reason: :limit_reached)
     end
@@ -70,10 +72,12 @@ defmodule MyOpsWeb.UserController do
 
   def balance(conn, _params) do
     user_id = get_user(conn)
+
     case Hammer.check_rate("balance:#{user_id}", 60_000, 5) do
       {:allow, _count} ->
         user = Account.get_user!(user_id)
         render(conn, :balance, user: user)
+
       {:deny, _limit} ->
         render(conn, :error, reason: :limit_reached)
     end
@@ -82,48 +86,57 @@ defmodule MyOpsWeb.UserController do
   def authorize(%{assigns: assigns} = conn, _params) do
     # %{"user_token_params" => user_token_params}
     user_id = get_user(conn)
+
     case Hammer.check_rate("authorize:#{user_id}", 60_000, 5) do
       {:allow, _count} ->
         %{params: params, request_uuid: uuid} = assigns
         user = Account.get_user!(user_id)
+
         with {:ok, %UserToken{} = user_token} <- Account.create_user_token(params) do
           IO.puts("params: #{inspect(user_token)}")
           render(conn, :user_token, user_token: user_token)
-        true
+          true
           render(conn, :user, user: user)
         end
+
       {:deny, _limit} ->
         render(conn, :error, reason: :limit_reached)
     end
-
   end
 
   def transaction_win(%{assigns: assigns} = conn, _params) do
     user_id = get_user(conn)
+
     case Hammer.check_rate("transaction_win:#{user_id}", 60_000, 5) do
       {:allow, _count} ->
         user = Account.get_user!(user_id)
-        %{params:  params } = assigns
+        %{params: params} = assigns
         tx_id = Map.get(params, "transaction_uuid")
         amount = Map.get(params, "amount")
+
         case ConCache.get(:tx_cache, tx_id) do
           nil ->
             ConCache.put(:tx_cache, tx_id, %{tx_status: :pending, result: nil})
-            user_params = %{"balance": user.balance + amount}
+            user_params = %{balance: user.balance + amount}
+
             case Account.update_user(user, user_params) do
               {:ok, user} ->
                 ConCache.put(:tx_cache, tx_id, %{tx_status: :completed, result: user})
                 render(conn, :balance, user: user)
+
               {:error, %Ecto.Changeset{} = changeset} ->
-                  ConCache.put(:tx_cache, tx_id, %{tx_status: :error, result: user})
-                  render(conn, :balance, user: user)
+                ConCache.put(:tx_cache, tx_id, %{tx_status: :error, result: user})
+                render(conn, :balance, user: user)
             end
+
           %{tx_status: :pending} ->
             result = retry(tx_id, 3)
             render(conn, :balance, user: result)
+
           %{result: result} ->
             render(conn, :balance, user: user)
         end
+
       {:deny, _limit} ->
         render(conn, :error, reason: :limit_reached)
     end
@@ -135,37 +148,46 @@ defmodule MyOpsWeb.UserController do
     render(conn, :balance, user: user)
   end
 
-  def transaction_bet(%{assigns: assigns} =conn, _params) do
+  def transaction_bet(%{assigns: assigns} = conn, _params) do
     user_id = get_user(conn)
+
     case Hammer.check_rate("transaction_bet:#{user_id}", 60_000, 5) do
       {:allow, _count} ->
         user = Account.get_user!(user_id)
-        %{params:  params } = assigns
+        %{params: params} = assigns
         tx_id = Map.get(params, "transaction_uuid")
         amount = Map.get(params, "amount")
+
         case ConCache.get(:tx_cache, tx_id) do
           nil ->
             ConCache.put(:tx_cache, tx_id, %{tx_status: :pending, result: nil})
+
             case user.balance >= amount do
               true ->
-                user_params = %{"balance": user.balance - amount}
+                user_params = %{balance: user.balance - amount}
+
                 case Account.update_user(user, user_params) do
                   {:ok, user} ->
                     ConCache.put(:tx_cache, tx_id, %{tx_status: :completed, result: user})
                     render(conn, :balance, user: user)
+
                   {:error, %Ecto.Changeset{} = changeset} ->
-                      ConCache.put(:tx_cache, tx_id, %{tx_status: :error, result: user})
-                      render(conn, :balance, user: user)
+                    ConCache.put(:tx_cache, tx_id, %{tx_status: :error, result: user})
+                    render(conn, :balance, user: user)
                 end
+
               false ->
                 render(conn, :balance, user: user)
             end
+
           %{tx_status: :pending} ->
             result = retry(tx_id, 3)
             render(conn, :balance, user: result)
+
           %{result: result} ->
             render(conn, :balance, user: user)
         end
+
       {:deny, _limit} ->
         render(conn, :error, reason: :limit_reached)
     end
@@ -185,11 +207,13 @@ defmodule MyOpsWeb.UserController do
     ConCache.put(:tx_cache, tx_id, %{tx_status: :error, result: nil})
     nil
   end
+
   defp retry(tx_id, retries_left) do
     case ConCache.get(:tx_cache, tx_id) do
       %{tx_status: :pending} ->
         :timer.sleep(1000)
-        retry(tx_id, retries_left-1)
+        retry(tx_id, retries_left - 1)
+
       %{result: result} ->
         result
     end
@@ -198,5 +222,4 @@ defmodule MyOpsWeb.UserController do
   defp get_user(_any) do
     1
   end
-
 end

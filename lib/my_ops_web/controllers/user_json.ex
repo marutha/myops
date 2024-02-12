@@ -21,7 +21,7 @@ defmodule MyOpsWeb.UserJSON do
       id: user.id,
       currency: user.currency,
       balance: user.balance
-     }
+    }
   end
 
   def user_token(user_token) do

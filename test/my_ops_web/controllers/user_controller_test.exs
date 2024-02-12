@@ -3,9 +3,42 @@ defmodule MyOpsWeb.UserControllerTest do
 
   import MyOps.AccountFixtures
 
-  @create_attrs %{affiliate_id: "some affiliate_id", balance: 120.5, birth_date: ~D[2024-02-10], country: "some country", currency: "some currency", jurisdiction: "some jurisdiction", name: "some name", registration_date: ~D[2024-02-10], sex: "some sex", sub_partner_id: "some sub_partner_id"}
-  @update_attrs %{affiliate_id: "some updated affiliate_id", balance: 456.7, birth_date: ~D[2024-02-11], country: "some updated country", currency: "some updated currency", jurisdiction: "some updated jurisdiction", name: "some updated name", registration_date: ~D[2024-02-11], sex: "some updated sex", sub_partner_id: "some updated sub_partner_id"}
-  @invalid_attrs %{affiliate_id: nil, balance: nil, birth_date: nil, country: nil, currency: nil, jurisdiction: nil, name: nil, registration_date: nil, sex: nil, sub_partner_id: nil}
+  @create_attrs %{
+    affiliate_id: "some affiliate_id",
+    balance: 120.5,
+    birth_date: ~D[2024-02-10],
+    country: "some country",
+    currency: "some currency",
+    jurisdiction: "some jurisdiction",
+    name: "some name",
+    registration_date: ~D[2024-02-10],
+    sex: "some sex",
+    sub_partner_id: "some sub_partner_id"
+  }
+  @update_attrs %{
+    affiliate_id: "some updated affiliate_id",
+    balance: 456.7,
+    birth_date: ~D[2024-02-11],
+    country: "some updated country",
+    currency: "some updated currency",
+    jurisdiction: "some updated jurisdiction",
+    name: "some updated name",
+    registration_date: ~D[2024-02-11],
+    sex: "some updated sex",
+    sub_partner_id: "some updated sub_partner_id"
+  }
+  @invalid_attrs %{
+    affiliate_id: nil,
+    balance: nil,
+    birth_date: nil,
+    country: nil,
+    currency: nil,
+    jurisdiction: nil,
+    name: nil,
+    registration_date: nil,
+    sex: nil,
+    sub_partner_id: nil
+  }
 
   describe "index" do
     test "lists all users", %{conn: conn} do
