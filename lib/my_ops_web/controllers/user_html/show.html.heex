@@ -1,0 +1,24 @@
+<.header>
+  User <%= @user.id %>
+  <:subtitle>This is a user record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/users/#{@user}/edit"}>
+      <.button>Edit user</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @user.name %></:item>
+  <:item title="Country"><%= @user.country %></:item>
+  <:item title="Jurisdiction"><%= @user.jurisdiction %></:item>
+  <:item title="Sub partner"><%= @user.sub_partner_id %></:item>
+  <:item title="Birth date"><%= @user.birth_date %></:item>
+  <:item title="Registration date"><%= @user.registration_date %></:item>
+  <:item title="Sex"><%= @user.sex %></:item>
+  <:item title="Affiliate"><%= @user.affiliate_id %></:item>
+  <:item title="Currency"><%= @user.currency %></:item>
+  <:item title="Balance"><%= @user.balance %></:item>
+</.list>
+
+<.back navigate={~p"/users"}>Back to users</.back>

@@ -1,0 +1,32 @@
+<.header>
+  Listing Users
+  <:actions>
+    <.link href={~p"/users/new"}>
+      <.button>New User</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="users" rows={@users} row_click={&JS.navigate(~p"/users/#{&1}")}>
+  <:col :let={user} label="Name"><%= user.name %></:col>
+  <:col :let={user} label="Country"><%= user.country %></:col>
+  <:col :let={user} label="Jurisdiction"><%= user.jurisdiction %></:col>
+  <:col :let={user} label="Sub partner"><%= user.sub_partner_id %></:col>
+  <:col :let={user} label="Birth date"><%= user.birth_date %></:col>
+  <:col :let={user} label="Registration date"><%= user.registration_date %></:col>
+  <:col :let={user} label="Sex"><%= user.sex %></:col>
+  <:col :let={user} label="Affiliate"><%= user.affiliate_id %></:col>
+  <:col :let={user} label="Currency"><%= user.currency %></:col>
+  <:col :let={user} label="Balance"><%= user.balance %></:col>
+  <:action :let={user}>
+    <div class="sr-only">
+      <.link navigate={~p"/users/#{user}"}>Show</.link>
+    </div>
+    <.link navigate={~p"/users/#{user}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={user}>
+    <.link href={~p"/users/#{user}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
